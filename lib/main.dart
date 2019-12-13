@@ -177,7 +177,7 @@ class _omNSState extends State<omNS> with TickerProviderStateMixin {
                   ),
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: Color(0xffA47568),
+                    color: Color(0xffCAACF4),
                   ),
                 ),
               ),
