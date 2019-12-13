@@ -200,7 +200,7 @@ class _omNSState extends State<omNS> with TickerProviderStateMixin {
               Positioned(
                 bottom: height * 0.153,
 //                right: width * 0.3,
-//                left: width * 0.455,
+//                left: width * 0.455
                 child: Row(
                   children: <Widget>[
                     Transform.scale(
