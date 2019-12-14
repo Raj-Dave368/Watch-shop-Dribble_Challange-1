@@ -1,11 +1,12 @@
 ///omNS BaBO
-///shiv BABO WE Love you
+///shiv BABO WE Love you and WE LOVE US
 /// om namah shivay✊🏻omNS omNS BaBO
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'dart:ui';
+import 'dart:math';
 
 void main() => runApp(MaterialApp(home: omNS()));
 
@@ -22,6 +23,10 @@ class _omNSState extends State<omNS> with TickerProviderStateMixin {
   Animation opacity;
   AnimationController opacitycontroller;
   AnimationController controller;
+  ScrollController mainScreenScroller;
+  double val;
+  AnimationController scrollAnimation;
+  AnimationController atscrollend;
 
   @override
   void initState() {
@@ -31,7 +36,7 @@ class _omNSState extends State<omNS> with TickerProviderStateMixin {
             //TODO: just try to remove this addListener and see the result
             //TODO: we are not able to see 'omNS' just because when animation gets
             //TODO: completed than we are not calling setState but as we are triggering .fling() at that time
-            //TODO: ,the value of opacitycontroller will start to increase but not reflect on screen As we are not
+            //TODO: ,the value of opacityController will start to increase but not reflect on screen As we are not
             //TODO: redrawing it
             setState(() {});
           });
@@ -57,6 +62,33 @@ class _omNSState extends State<omNS> with TickerProviderStateMixin {
       });
     });
 
+    scrollAnimation = AnimationController(
+      vsync: this,
+      duration: Duration(seconds: 1),
+    )..addStatusListener((status) {
+        setState(() {});
+      });
+
+    scrollAnimation.addListener(() {
+      setState(() {});
+    });
+
+    atscrollend =
+        AnimationController(vsync: this, duration: Duration(seconds: 1));
+
+    atscrollend.addListener(() {
+      mainScreenScroller
+          .jumpTo(mainScreenScroller.offset + atscrollend.value * 16);
+      setState(() {});
+    });
+
+    mainScreenScroller = ScrollController();
+
+    mainScreenScroller.addListener(() {
+      print("omNS");
+      setState(() {});
+    });
+
     super.initState();
   }
 
@@ -73,6 +105,104 @@ class _omNSState extends State<omNS> with TickerProviderStateMixin {
             alignment: Alignment.center,
             children: [
               Image.asset("lib/BaBO.png"),
+              Container(
+                width: width,
+                height: height,
+                child: ListView(controller: mainScreenScroller, children: [
+                  GestureDetector(
+                    onTap: () {
+                      mainScreenScroller.jumpTo(0);
+                    },
+                    onVerticalDragUpdate: (_) {
+                      print(
+                          "omNS ${mainScreenScroller.offset - _.primaryDelta} ${_.primaryDelta}");
+                      mainScreenScroller
+                          .jumpTo(mainScreenScroller.offset - _.primaryDelta);
+
+                      scrollAnimation.value -= _.primaryDelta / 500;
+                      // TODO: AMAZING USE OF  / 1000
+                    },
+                    onVerticalDragEnd: (_) {
+                      scrollAnimation.fling(velocity: -0.3);
+
+                      if (_.velocity.pixelsPerSecond.dy > 0)
+                        atscrollend.fling(
+                            velocity: max(2, _.velocity.pixelsPerSecond.dy));
+                      else
+                        atscrollend.fling(
+                            velocity: min(2, -_.velocity.pixelsPerSecond.dy));
+                    },
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Container(
+                          child: Column(
+                            children: List.generate(
+                              4,
+                              (i) => Container(
+                                color: Colors.blue,
+                                margin: EdgeInsets.only(
+                                  top: lerpDouble(
+                                      7.3681, 106, scrollAnimation.value),
+                                  bottom: 7.3681,
+                                  left: 7.3681,
+                                  right: 7.3681,
+                                ),
+                                width: width * 0.45,
+                                height: 326,
+                                child: Column(
+                                  children: <Widget>[
+                                    SizedBox(
+                                      width: 200,
+                                      height: 200,
+                                      child: Image.asset(
+                                        "Assets/omNSwatch.png",
+                                      ),
+                                    ),
+                                    Text(
+                                      "omNS",
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Container(
+                              color: Colors.blue,
+                              margin: EdgeInsets.only(
+                                top: lerpDouble(7.3681, 100, 0),
+                                bottom: 7.3681,
+                                left: 7.3681,
+                                right: 7.3681,
+                              ),
+                              width: width * 0.45,
+                              height: 326,
+                              child: Column(
+                                children: <Widget>[
+                                  SizedBox(
+                                    width: 200,
+                                    height: 200,
+                                    child: Image.asset(
+                                      "Assets/omNSwatch.png",
+                                    ),
+                                  ),
+                                  Text(
+                                    "omNS",
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ]),
+              ),
               Positioned(
                 bottom: lerpDouble(height * .141, -36, animation.value),
                 /*
